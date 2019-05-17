@@ -21,8 +21,6 @@ var _utils = require('./utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 /**
  * Utility returning a node-sass importer that provides access to all of antd's theme variables.
  * @param {string} themeScssPath - Path to SCSS file containing Ant Design theme variables.
@@ -45,17 +43,11 @@ const themeImporter = exports.themeImporter = (themeScssPath, contents) => (url,
   done();
 };
 
-const getThemeImporter = exports.getThemeImporter = (() => {
-  var _ref = _asyncToGenerator(function* (options) {
-    const scssThemePath = (0, _loaderUtils2.getScssThemePath)(options);
-    const antDefaultLessPath = (0, _loaderUtils2.getAntDefaultLessPath)(options);
+const getThemeImporter = exports.getThemeImporter = options => {
+  const scssThemePath = (0, _loaderUtils2.getScssThemePath)(options);
+  const antDefaultLessPath = (0, _loaderUtils2.getAntDefaultLessPath)(options);
 
-    const contents = (0, _utils.compileThemeVariables)(scssThemePath, antDefaultLessPath);
-    const extraImporter = themeImporter(scssThemePath, contents);
-    return extraImporter;
-  });
-
-  return function getThemeImporter(_x) {
-    return _ref.apply(this, arguments);
-  };
-})();
+  const contents = (0, _utils.compileThemeVariables)(scssThemePath, antDefaultLessPath);
+  const extraImporter = themeImporter(scssThemePath, contents);
+  return extraImporter;
+};

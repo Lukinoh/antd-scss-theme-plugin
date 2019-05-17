@@ -31,7 +31,7 @@ export const themeImporter = (themeScssPath, contents) => (url, previousResolve,
   done();
 };
 
-export const getThemeImporter = async (options) => {
+export const getThemeImporter = (options) => {
   const scssThemePath = getScssThemePath(options);
   const antDefaultLessPath = getAntDefaultLessPath(options);
 
