@@ -60,7 +60,8 @@ describe('loadScssThemeAsLess', () => {
 describe('compileThemeVariables', () => {
   it('should produce enough variables', async () => {
     const scssThemePath = path.join(__dirname, 'data', 'theme.scss');
-    const output = await compileThemeVariables(scssThemePath);
+    const antDefaultLessPath = path.join(__dirname, '../node_modules', 'antd', 'lib', 'style', 'themes', 'default.less');
+    const output = await compileThemeVariables(scssThemePath, antDefaultLessPath);
     const variableCount = output.split('\n').filter(line => line.startsWith('$')).length;
     expect(variableCount).toBeGreaterThan(400);
   });

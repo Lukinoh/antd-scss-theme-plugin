@@ -28,6 +28,7 @@ export const extractLessVariables = (lessEntryPath, variableOverrides = {}) => {
               callback: variables => resolve(variables),
             }),
           ],
+          syncImport: true,
         },
       );
     } catch (error) {
@@ -67,9 +68,11 @@ export const loadScssThemeAsLess = (themeScssPath) => {
  *   Design.
  * @return {string} A string representing an SCSS file containing all the theme and color
  *   variables used in Ant Design.
+ * @return {string} A string representing a LESS file containing the default theme of
+ *   ant to be overridden.
  */
-export const compileThemeVariables = (themeScssPath) => {
-  const themeEntryPath = require.resolve('antd/lib/style/themes/default.less');
+export const compileThemeVariables = (themeScssPath, antDefaultLessPath) => {
+  const themeEntryPath = require.resolve(antDefaultLessPath);
   const variableOverrides = themeScssPath ? loadScssThemeAsLess(themeScssPath) : {};
 
   return extractLessVariables(themeEntryPath, variableOverrides)

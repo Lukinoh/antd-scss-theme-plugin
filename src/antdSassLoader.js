@@ -1,10 +1,9 @@
 import path from 'path';
 
-import { getOptions, urlToRequest } from 'loader-utils';
-import sassLoader from 'sass-loader';
+import { urlToRequest } from 'loader-utils';
 import importsToResolve from 'sass-loader/lib/importsToResolve';
 
-import { getScssThemePath } from './loaderUtils';
+import { getAntDefaultLessPath, getScssThemePath } from './loaderUtils';
 import {
   compileThemeVariables,
 } from './utils';
@@ -32,62 +31,11 @@ export const themeImporter = (themeScssPath, contents) => (url, previousResolve,
   done();
 };
 
-
-/**
- * Modify sass-loader's options so that all antd variables are imported from the SCSS theme file.
- * @param {Object} options - Options for sass-loader.
- * @return {Object} Options modified to includ a custom importer that handles the SCSS theme file.
- */
-export const overloadSassLoaderOptions = async (options) => {
-  const newOptions = { ...options };
+export const getThemeImporter = async (options) => {
   const scssThemePath = getScssThemePath(options);
+  const antDefaultLessPath = getAntDefaultLessPath(options);
 
-  const contents = await compileThemeVariables(scssThemePath);
+  const contents = await compileThemeVariables(scssThemePath, antDefaultLessPath);
   const extraImporter = themeImporter(scssThemePath, contents);
-
-  let importer;
-  if ('importer' in options) {
-    if (Array.isArray(options.importer)) {
-      importer = [...options.importer, extraImporter];
-    } else {
-      importer = [options.importer, extraImporter];
-    }
-  } else {
-    importer = extraImporter;
-  }
-
-  newOptions.importer = importer;
-
-  return newOptions;
+  return extraImporter;
 };
-
-
-/**
- * A wrapper around sass-loader which overloads loader options to include a custom importer handling
- * variable imports from the SCSS theme file, and registers the theme file as a watched dependency.
- * @param {...*} args - Arguments passed to sass-loader.
- * @return {undefined}
- */
-export default function antdSassLoader(...args) {
-  const loaderContext = this;
-  const callback = loaderContext.async();
-  const options = getOptions(loaderContext);
-
-  const newLoaderContext = { ...loaderContext };
-
-  overloadSassLoaderOptions(options)
-    .then((newOptions) => {
-      delete newOptions.scssThemePath; // eslint-disable-line no-param-reassign
-      newLoaderContext.query = newOptions;
-
-      const scssThemePath = getScssThemePath(options);
-      newLoaderContext.addDependency(scssThemePath);
-
-      return sassLoader.call(newLoaderContext, ...args);
-    })
-    .catch((error) => {
-      // Remove unhelpful stack from error.
-      error.stack = undefined; // eslint-disable-line no-param-reassign
-      callback(error);
-    });
-}

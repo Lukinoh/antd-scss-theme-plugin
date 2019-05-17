@@ -19,3 +19,17 @@ export const getScssThemePath = (options) => {
 
   return scssThemePath;
 };
+
+export const getAntDefaultLessPath = (options) => {
+  // eslint-disable-next-line max-len
+  const antDefaultLessPath = options.antDefaultLessPath || AntdScssThemePlugin.ANT_DEFAULT_LESS_PATH;
+
+  if (!antDefaultLessPath) {
+    throw new Error(
+      'Path to an LESS default theme file must be specified through the scssThemePath loader option, ' +
+      'or passed to the plugin\'s constructor.',
+    );
+  }
+
+  return antDefaultLessPath;
+};
