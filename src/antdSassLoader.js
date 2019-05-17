@@ -35,7 +35,7 @@ export const getThemeImporter = async (options) => {
   const scssThemePath = getScssThemePath(options);
   const antDefaultLessPath = getAntDefaultLessPath(options);
 
-  const contents = await compileThemeVariables(scssThemePath, antDefaultLessPath);
+  const contents = compileThemeVariables(scssThemePath, antDefaultLessPath);
   const extraImporter = themeImporter(scssThemePath, contents);
   return extraImporter;
 };

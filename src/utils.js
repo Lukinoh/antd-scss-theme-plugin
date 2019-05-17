@@ -15,26 +15,25 @@ import ExtractVariablesPlugin from './extractVariablesLessPlugin';
  */
 export const extractLessVariables = (lessEntryPath, variableOverrides = {}) => {
   const lessEntry = fs.readFileSync(lessEntryPath, 'utf8');
-  return new Promise(async (resolve, reject) => {
-    try {
-      await less.render(
-        lessEntry,
-        {
-          filename: lessEntryPath,
-          javascriptEnabled: true,
-          modifyVars: variableOverrides,
-          plugins: [
-            new ExtractVariablesPlugin({
-              callback: variables => resolve(variables),
-            }),
-          ],
-          syncImport: true,
-        },
-      );
-    } catch (error) {
-      reject(error);
-    }
-  });
+  let extractedLessVariables = {};
+  less.render(
+    lessEntry,
+    {
+      filename: lessEntryPath,
+      javascriptEnabled: true,
+      modifyVars: variableOverrides,
+      plugins: [
+        new ExtractVariablesPlugin({
+          callback: (variables) => {
+            extractedLessVariables = variables;
+          },
+        }),
+      ],
+      syncImport: true,
+    },
+  );
+
+  return extractedLessVariables;
 };
 
 
@@ -75,10 +74,8 @@ export const compileThemeVariables = (themeScssPath, antDefaultLessPath) => {
   const themeEntryPath = require.resolve(antDefaultLessPath);
   const variableOverrides = themeScssPath ? loadScssThemeAsLess(themeScssPath) : {};
 
-  return extractLessVariables(themeEntryPath, variableOverrides)
-    .then(variables => (
-      Object.entries(variables)
-        .map(([name, value]) => `$${name}: ${value};\n`)
-        .join('')
-    ));
+  const variables = extractLessVariables(themeEntryPath, variableOverrides)
+  return Object.entries(variables)
+    .map(([name, value]) => `$${name}: ${value};\n`)
+    .join('');
 };

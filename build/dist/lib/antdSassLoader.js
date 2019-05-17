@@ -50,7 +50,7 @@ const getThemeImporter = exports.getThemeImporter = (() => {
     const scssThemePath = (0, _loaderUtils2.getScssThemePath)(options);
     const antDefaultLessPath = (0, _loaderUtils2.getAntDefaultLessPath)(options);
 
-    const contents = yield (0, _utils.compileThemeVariables)(scssThemePath, antDefaultLessPath);
+    const contents = (0, _utils.compileThemeVariables)(scssThemePath, antDefaultLessPath);
     const extraImporter = themeImporter(scssThemePath, contents);
     return extraImporter;
   });

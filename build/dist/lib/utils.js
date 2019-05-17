@@ -23,8 +23,6 @@ var _extractVariablesLessPlugin2 = _interopRequireDefault(_extractVariablesLessP
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
 /**
  * Return values of compiled Less variables from a compilable entry point.
  * @param {string} lessEntryPath - Root Less file from which to extract variables.
@@ -34,29 +32,20 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
  */
 const extractLessVariables = exports.extractLessVariables = (lessEntryPath, variableOverrides = {}) => {
   const lessEntry = _fs2.default.readFileSync(lessEntryPath, 'utf8');
-  return new Promise((() => {
-    var _ref = _asyncToGenerator(function* (resolve, reject) {
-      try {
-        yield _less2.default.render(lessEntry, {
-          filename: lessEntryPath,
-          javascriptEnabled: true,
-          modifyVars: variableOverrides,
-          plugins: [new _extractVariablesLessPlugin2.default({
-            callback: function (variables) {
-              return resolve(variables);
-            }
-          })],
-          syncImport: true
-        });
-      } catch (error) {
-        reject(error);
+  let extractedLessVariables = {};
+  _less2.default.render(lessEntry, {
+    filename: lessEntryPath,
+    javascriptEnabled: true,
+    modifyVars: variableOverrides,
+    plugins: [new _extractVariablesLessPlugin2.default({
+      callback: variables => {
+        extractedLessVariables = variables;
       }
-    });
+    })],
+    syncImport: true
+  });
 
-    return function (_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  })());
+  return extractedLessVariables;
 };
 
 /**
@@ -92,5 +81,6 @@ const compileThemeVariables = exports.compileThemeVariables = (themeScssPath, an
   const themeEntryPath = require.resolve(antDefaultLessPath);
   const variableOverrides = themeScssPath ? loadScssThemeAsLess(themeScssPath) : {};
 
-  return extractLessVariables(themeEntryPath, variableOverrides).then(variables => Object.entries(variables).map(([name, value]) => `$${name}: ${value};\n`).join(''));
+  const variables = extractLessVariables(themeEntryPath, variableOverrides);
+  return Object.entries(variables).map(([name, value]) => `$${name}: ${value};\n`).join('');
 };
