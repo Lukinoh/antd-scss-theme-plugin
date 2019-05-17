@@ -3,7 +3,7 @@ import path from 'path';
 import { urlToRequest } from 'loader-utils';
 import importsToResolve from 'sass-loader/lib/importsToResolve';
 
-import { getAntDefaultLessPath, getScssThemePath } from './loaderUtils';
+import { getAntDefaultThemePath, getScssThemePath } from './loaderUtils';
 import {
   compileThemeVariables,
 } from './utils';
@@ -33,9 +33,9 @@ export const themeImporter = (themeScssPath, contents) => (url, previousResolve,
 
 export const getThemeImporter = (options) => {
   const scssThemePath = getScssThemePath(options);
-  const antDefaultLessPath = getAntDefaultLessPath(options);
+  const antDefaultThemePath = getAntDefaultThemePath(options);
 
-  const contents = compileThemeVariables(scssThemePath, antDefaultLessPath);
+  const contents = compileThemeVariables(scssThemePath, antDefaultThemePath);
   const extraImporter = themeImporter(scssThemePath, contents);
   return extraImporter;
 };

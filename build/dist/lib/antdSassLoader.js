@@ -45,9 +45,9 @@ const themeImporter = exports.themeImporter = (themeScssPath, contents) => (url,
 
 const getThemeImporter = exports.getThemeImporter = options => {
   const scssThemePath = (0, _loaderUtils2.getScssThemePath)(options);
-  const antDefaultLessPath = (0, _loaderUtils2.getAntDefaultLessPath)(options);
+  const antDefaultThemePath = (0, _loaderUtils2.getAntDefaultThemePath)(options);
 
-  const contents = (0, _utils.compileThemeVariables)(scssThemePath, antDefaultLessPath);
+  const contents = (0, _utils.compileThemeVariables)(scssThemePath, antDefaultThemePath);
   const extraImporter = themeImporter(scssThemePath, contents);
   return extraImporter;
 };

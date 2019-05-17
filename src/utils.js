@@ -70,8 +70,8 @@ export const loadScssThemeAsLess = (themeScssPath) => {
  * @return {string} A string representing a LESS file containing the default theme of
  *   ant to be overridden.
  */
-export const compileThemeVariables = (themeScssPath, antDefaultLessPath) => {
-  const themeEntryPath = require.resolve(antDefaultLessPath);
+export const compileThemeVariables = (themeScssPath, antDefaultThemePath) => {
+  const themeEntryPath = require.resolve(antDefaultThemePath);
   const variableOverrides = themeScssPath ? loadScssThemeAsLess(themeScssPath) : {};
 
   const variables = extractLessVariables(themeEntryPath, variableOverrides)
