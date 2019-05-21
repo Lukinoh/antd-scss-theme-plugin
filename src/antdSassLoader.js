@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 
 import { urlToRequest } from 'loader-utils';
@@ -24,6 +25,7 @@ export const themeImporter = (themeScssPath, contents) => (url, previousResolve,
   for (let i = 0; i < pathsToTry.length; i += 1) {
     const potentialResolve = pathsToTry[i];
     if (path.resolve(baseDirectory, potentialResolve) === themeScssPath) {
+      fs.writeFileSync(themeScssPath.replace('.scss', '-generated.scss'), contents, 'utf8');
       done({ contents });
       return;
     }

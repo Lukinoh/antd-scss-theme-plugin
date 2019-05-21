@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getThemeImporter = exports.themeImporter = undefined;
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -36,6 +40,7 @@ const themeImporter = exports.themeImporter = (themeScssPath, contents) => (url,
   for (let i = 0; i < pathsToTry.length; i += 1) {
     const potentialResolve = pathsToTry[i];
     if (_path2.default.resolve(baseDirectory, potentialResolve) === themeScssPath) {
+      _fs2.default.writeFileSync(themeScssPath.replace('.scss', '-generated.scss'), contents, 'utf8');
       done({ contents });
       return;
     }
