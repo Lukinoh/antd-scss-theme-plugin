@@ -1,7 +1,7 @@
 {
   "name": "antd-scss-theme-plugin",
   "description": "A Webpack plugin for customizing Ant Design with SCSS.",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "build/dist/lib/index.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production babel src --out-dir build/dist/lib",
@@ -42,7 +42,7 @@
   "peerDependencies": {
     "antd": "^3.2.0",
     "less-loader": "^4.0.5",
-    "sass-loader": "^6.0.6"
+    "sass-loader": "^7.3.0"
   },
   "devDependencies": {
     "antd": "^3.2.0",
@@ -66,7 +66,7 @@
     "node-sass": "^4.7.2",
     "raw-loader": "^0.5.1",
     "rimraf": "^2.6.2",
-    "sass-loader": "^6.0.7",
+    "sass-loader": "^7.3.0",
     "webpack": "^3.10.0",
     "webpack-node-externals": "^1.6.0"
   }

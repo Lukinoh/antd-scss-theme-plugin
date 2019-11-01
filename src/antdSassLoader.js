@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { urlToRequest } from 'loader-utils';
-import importsToResolve from 'sass-loader/lib/importsToResolve';
+import importsToResolve from 'sass-loader/dist/importsToResolve';
 
 import { getAntDefaultThemePath, getScssThemePath } from './loaderUtils';
 import {
