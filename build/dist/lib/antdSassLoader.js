@@ -15,7 +15,7 @@ var _path2 = _interopRequireDefault(_path);
 
 var _loaderUtils = require('loader-utils');
 
-var _importsToResolve = require('sass-loader/lib/importsToResolve');
+var _importsToResolve = require('sass-loader/dist/importsToResolve');
 
 var _importsToResolve2 = _interopRequireDefault(_importsToResolve);
 
