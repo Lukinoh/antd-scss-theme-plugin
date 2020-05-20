@@ -1,29 +1,23 @@
-'use strict';
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getThemeImporter = exports.themeImporter = undefined;
+exports.getThemeImporter = exports.themeImporter = void 0;
 
-var _fs = require('fs');
+var _fs = _interopRequireDefault(require("fs"));
 
-var _fs2 = _interopRequireDefault(_fs);
+var _path = _interopRequireDefault(require("path"));
 
-var _path = require('path');
+var _loaderUtils = require("loader-utils");
 
-var _path2 = _interopRequireDefault(_path);
+var _importsToResolve = _interopRequireDefault(require("sass-loader/dist/importsToResolve"));
 
-var _loaderUtils = require('loader-utils');
+var _loaderUtils2 = require("./loaderUtils");
 
-var _importsToResolve = require('sass-loader/dist/importsToResolve');
-
-var _importsToResolve2 = _interopRequireDefault(_importsToResolve);
-
-var _loaderUtils2 = require('./loaderUtils');
-
-var _utils = require('./utils');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _utils = require("./utils");
 
 /**
  * Utility returning a node-sass importer that provides access to all of antd's theme variables.
@@ -32,27 +26,38 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @returns {function} Importer that provides access to all compiled Ant Design theme variables
  *   when importing the theme file at themeScssPath.
  */
-const themeImporter = exports.themeImporter = (themeScssPath, contents) => (url, previousResolve, done) => {
-  const request = (0, _loaderUtils.urlToRequest)(url);
-  const pathsToTry = (0, _importsToResolve2.default)(request);
+var themeImporter = function themeImporter(themeScssPath, contents) {
+  return function (url, previousResolve, done) {
+    var request = (0, _loaderUtils.urlToRequest)(url);
+    var pathsToTry = (0, _importsToResolve["default"])(request);
 
-  const baseDirectory = _path2.default.dirname(previousResolve);
-  for (let i = 0; i < pathsToTry.length; i += 1) {
-    const potentialResolve = pathsToTry[i];
-    if (_path2.default.resolve(baseDirectory, potentialResolve) === themeScssPath) {
-      _fs2.default.writeFileSync(themeScssPath.replace('.scss', '-generated.scss'), contents, 'utf8');
-      done({ contents });
-      return;
+    var baseDirectory = _path["default"].dirname(previousResolve);
+
+    for (var i = 0; i < pathsToTry.length; i += 1) {
+      var potentialResolve = pathsToTry[i];
+
+      if (_path["default"].resolve(baseDirectory, potentialResolve) === themeScssPath) {
+        _fs["default"].writeFileSync(themeScssPath.replace('.scss', '-generated.scss'), contents, 'utf8');
+
+        done({
+          contents: contents
+        });
+        return;
+      }
     }
-  }
-  done();
+
+    done();
+  };
 };
 
-const getThemeImporter = exports.getThemeImporter = options => {
-  const scssThemePath = (0, _loaderUtils2.getScssThemePath)(options);
-  const antDefaultThemePath = (0, _loaderUtils2.getAntDefaultThemePath)(options);
+exports.themeImporter = themeImporter;
 
-  const contents = (0, _utils.compileThemeVariables)(scssThemePath, antDefaultThemePath);
-  const extraImporter = themeImporter(scssThemePath, contents);
+var getThemeImporter = function getThemeImporter(options) {
+  var scssThemePath = (0, _loaderUtils2.getScssThemePath)(options);
+  var antDefaultThemePath = (0, _loaderUtils2.getAntDefaultThemePath)(options);
+  var contents = (0, _utils.compileThemeVariables)(scssThemePath, antDefaultThemePath);
+  var extraImporter = themeImporter(scssThemePath, contents);
   return extraImporter;
 };
+
+exports.getThemeImporter = getThemeImporter;

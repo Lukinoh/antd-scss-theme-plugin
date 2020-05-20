@@ -1,19 +1,18 @@
-'use strict';
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-var _antdSassLoader = require('./antdSassLoader');
+var _antdSassLoader = require("./antdSassLoader");
 
-var _sassVarsToLess = require('./sassVarsToLess');
+var _sassVarsToLess = _interopRequireDefault(require("./sassVarsToLess"));
 
-var _sassVarsToLess2 = _interopRequireDefault(_sassVarsToLess);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
+var _default = {
   getThemeImporter: _antdSassLoader.getThemeImporter,
-  sassVarsToLess: _sassVarsToLess2.default
+  sassVarsToLess: _sassVarsToLess["default"]
 };
-module.exports = exports['default'];
+exports["default"] = _default;
